@@ -1,0 +1,103 @@
+##### ---------------- ZSHRC FÜR MAC (robust & schlank)
+
+# Farben
+autoload -Uz colors && colors
+export CLICOLOR=1
+export LSCOLORS=fxfxcxdxbxfxedabagacad
+set -o pipefail
+setopt NO_BEEP
+setopt AUTO_CD
+setopt EXTENDED_GLOB
+setopt PROMPT_SUBST
+
+##### ---------------- ALIASES & FUNKTIONEN
+
+# GNU grep (Homebrew) bevorzugen, sonst sauberer Fallback
+if command -v ggrep >/dev/null 2>&1; then
+  alias grep='ggrep --color=auto'
+  alias egrep='ggrep -E --color=auto'
+  alias fgrep='ggrep -F --color=auto'
+else
+  alias grep='grep --color=auto'
+  alias egrep='grep -E --color=auto'
+  alias fgrep='grep -F --color=auto'
+fi
+
+# BSD ls
+alias ls='ls -G'
+alias ll='ls -lhp'
+alias la='ls -lAhp'
+
+alias ..='cd ..'
+alias ...='cd ../..'
+alias r='source ~/.zshrc'
+alias pi2='ssh 192.168.178.34 -p 12529 -l pi'
+alias pi4='ssh 192.168.178.75 -p 22 -l pi'
+alias snap='sudo bash ~/Skripte/snap.sh'
+alias suche='sudo bash ~/Skripte/suche.sh'
+alias hide='bash ~/Skripte/hide.sh'
+alias unhide='bash ~/Skripte/unhide.sh'
+alias upd='brew update && brew upgrade && brew autoremove && brew cleanup && brew doctor'
+alias c='clear && printf "\e[3J"'
+if [[ $- == *i* ]]; then
+  alias rm='\rm -i'
+  alias mv='\mv -i'
+  alias cp='\cp -i'
+  alias mkdir='mkdir -p'
+  alias df='df -h'
+  alias du='du -sh'
+fi
+alias path='echo $PATH | tr ":" "\n"'
+alias reboot='sudo shutdown -r now'
+alias flushdns='sudo dscacheutil -flushcache; sudo killall -HUP mDNSResponder'
+
+##### ---------------- HISTORY
+
+HISTSIZE=50000
+SAVEHIST=50000
+HISTFILE=~/.zsh_history
+
+setopt APPEND_HISTORY
+setopt INC_APPEND_HISTORY
+setopt INC_APPEND_HISTORY_TIME
+setopt EXTENDED_HISTORY
+setopt HIST_REDUCE_BLANKS
+setopt HIST_VERIFY
+setopt HIST_IGNORE_SPACE
+setopt HIST_IGNORE_ALL_DUPS
+setopt HIST_EXPIRE_DUPS_FIRST
+setopt HIST_FIND_NO_DUPS
+setopt HIST_FCNTL_LOCK
+
+##### ---------------- PROMPT & GIT
+
+# vcs_info per Hook (nicht precmd überschreiben)
+autoload -Uz vcs_info add-zsh-hook
+zstyle ':vcs_info:git:*' formats '(%b)'
+zstyle ':vcs_info:*' enable git
+add-zsh-hook precmd vcs_info
+
+# Prompt mit Exit-Code-Farbe und Root-Erkennung
+PROMPT='%F{green}%n%f@%F{yellow}%m%f:%F{yellow}%~%f ${vcs_info_msg_0_} %(?.%F{cyan}0%f.%F{red}%?%f) %# '
+RPROMPT='%*'
+
+##### ---------------- START-BANNER (lokal, nicht via SSH)
+
+if [[ -t 1 && -z "${SSH_TTY:-}" ]]; then
+  clear; printf "\e[3J"
+  MESSAGE="Willkommen zurück, René."
+  if command -v fortune >/dev/null && [[ -d "$HOME/Fortunes/de" ]]; then
+    FILES=($HOME/Fortunes/de/*.dat(N))
+    if (( ${#FILES[@]} )); then
+      PICK=${FILES[$((RANDOM % ${#FILES[@]} + 1))]}
+      MESSAGE=$(fortune "${PICK%.dat}")
+    fi
+  fi
+  if command -v cowsay >/dev/null; then
+    echo "$MESSAGE" | cowsay
+    echo
+  else
+    echo "$MESSAGE"
+    echo
+  fi
+fi
