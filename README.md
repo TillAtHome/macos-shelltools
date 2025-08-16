@@ -1,32 +1,32 @@
 # macOS Setup Scripts
 
-Systemnahe, minimalistische Shellskripte zur Konfiguration, Wiederherstellung und Individualisierung von macOS (Zsh, Terminal, Finder, Launchd, Homebrew).
+Minimal, system-focused shell scripts for configuration, recovery, and customization of macOS (Zsh, Terminal, Finder, Launchd, Homebrew).
 
-## Struktur
+## Structure
 
 ```
-zsh/
-  zprofile.txt         → Vorlage für .zprofile
-  zshrc.txt            → Vorlage für .zshrc
-
-scripts/
-  macsetup.sh          → Hauptskript für neue macOS-Installationen
-  finder-reset.sh      → Finder-, Dock- und Defaults-Reset inkl. Cache-Säuberung
-  terminalprofil.sh    → Terminal-Profile importieren und als Standard setzen
-  goto_folder.sh       → „Gehe zu Ordner“-Verlauf im Finder löschen
-  snap.sh              → Lokale Time Machine Snapshots entfernen
-  trash.sh             → Dateireste nach App-Deinstallationen finden
+.
+├── zsh/                    # Zsh configuration files
+│   ├── zprofile.txt        # Content of .zprofile
+│   └── zshrc.txt           # Content of .zshrc
+├── scripts/                # Shell scripts (setup, reset, customization)
+│   ├── macsetup.sh         # Main setup script for fresh macOS installs
+│   ├── finder-reset.sh     # Finder, Dock, and defaults reset with cache cleanup
+│   ├── terminalprofile.sh  # Imports and applies Terminal profile
+│   ├── goto_folder.sh      # Clears Finder's "Go to folder" history
+│   ├── snap.sh             # Deletes local Time Machine snapshots
+│   └── trash.sh            # Finds app leftovers after deletion
 ```
 
-## Hinweise
+## Notes
 
-- Getestet unter macOS 14 (Sonoma) und 15 (Sequoia)
-- Keine externen Frameworks, keine Abhängigkeiten
-- Homebrew empfohlen für aktuelle `bash`, `nano`, `grep` etc.
-- Alle Skripte sind kommentiert, anpassbar und portabel
-- Keine Telemetrie, kein Netzwerkzugriff (außer bei Homebrew-Installation)
+- Tested on macOS 14 (Sonoma) and 15 (Sequoia)
+- No frameworks, no dependencies
+- Homebrew recommended for recent `bash`, `nano`, `grep`, etc.
+- Scripts are fully commented, customizable, and portable
+- No telemetry, no automatic network access (except during Homebrew install)
 
-## Lizenz
+## License
 
-MIT License – freie Nutzung mit Namensnennung.  
-Autor: **TilliAtHome**
+MIT License – free use with attribution.  
+Author: **TilliAtHome**
